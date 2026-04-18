@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: checkdesc-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /desc
+            pathType: Prefix
+            backend:
+              service:
+                name: checkdesc
+                port:
+                  number: 8080
+
+          - path: /exam
+            pathType: Prefix
+            backend:
+              service:
+                name: checkexam
+                port:
+                  number: 8081
