@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: checkdesc-ingress
+  namespace: default
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "false"
 spec:
@@ -24,3 +25,20 @@ spec:
                 name: checkexam
                 port:
                   number: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+    - name: https
+      port: 443
+      targetPort: https
