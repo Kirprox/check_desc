@@ -1,0 +1,5 @@
+CREATE TABLE exams
+(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255)
+);
