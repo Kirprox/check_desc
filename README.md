@@ -15,36 +15,45 @@ id экзамена
 название экзамена
 
 ### Клонирование проекта
-проект состоит из двух сервисов 
+
+Проект состоит из трёх репозиториев и имеет следующую структуру:
+```
+project/
+├── check_desc/
+├── check_exam/
+└── check_infra/
+```
 
 check_desk - https://github.com/Kirprox/check_desc
 
 check_exam - https://github.com/Kirprox/check_exam
 
+check_infra - https://github.com/Kirprox/check_infra
+
 Необходимо скачать их в одну папку.
 
-### Подготовка структуры проекта
+### Сборка Docker-образа
 
-#### Манифесты k8s находятся в каталоге k8s. каталог лежит в проекте checkdeck. их желательно вынести в общую папку с сервисами
+Сборка и публикация образа выполняется автоматически через bat-файл из репозитория check_infra.
 
-### Сборка и запуск
-для запуска через ide надо поменять в сервисе checkexam application.properties --desc-api-url = http://checkdesc:8080/desc на http://localhost:8080/desc
+### Запуск в Kubernetes
 
-необходимо переключить докер на миникуб с помощью команды @FOR /f "tokens=*" %i IN ('minikube docker-env') DO @%i. 
-чтобы собрать образы внутри миникуба а не в докер десктоп.
+Перейти в папку check_infra
+Выполнить:
+kubectl apply -f k8s/
 
-после сборки, применяем манифесты. так же включаем ингрес с помощью команды minikube addons enable ingress
+Включить ingress (если не включен):
+minikube addons enable ingress
 
-вводим команду minikube ip чтобы определить адрес, по которому будем делать запросы
+При необходимости выполнить:
+minikube tunnel
 
-далее добавляем к адресу /desc.
+### Доступ к API
 
-если ответа не будет, нужно выполнить команду kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8080:80 и после этого
- сервисы будут доступны по адресам
+После запуска сервис доступен по адресу:
+http://127.0.0.1/desc - вернет список экзаменов
 
-http://localhost:8080/desc - вернет список экзаменов
-
-http://localhost:8080/exam - вернет список пользователей и их экзаменов
+http://127.0.0.1/exam - вернет список пользователей и их экзаменов
 
 
 
